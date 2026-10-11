@@ -1,0 +1,23 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+        args: ["--allow-multiple-documents"]
+      - id: check-added-large-files
+      - id: check-merge-conflict
+
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.24.2
+    hooks:
+      - id: gitleaks
+
+  - repo: local
+    hooks:
+      - id: sops-encrypted
+        name: Verifica que los *.secret(s).yaml esten encriptados con sops
+        entry: "bash -c 'for f in \"$@\"; do grep -q \"^sops:\" \"$f\" || { echo \"NO encriptado: $f\"; exit 1; }; done' --"
+        language: system
+        files: '(\.decrypted~.*)?\.secrets?\.ya?ml$'

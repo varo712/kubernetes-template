@@ -1,0 +1,4 @@
+{
+  "sops.creationEnabled": true,
+  "sops.configPath": "./.sopsrc"
+}

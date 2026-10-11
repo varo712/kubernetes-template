@@ -1,0 +1,5 @@
+creation_rules:
+  - path_regex: '.*\.secrets?\.ya?ml$'
+    # Reemplaza por la public key generada con `mise run age-keygen`
+    # (ver ~/.config/sops/age/keys.txt -> linea "public key: age1...")
+    age: <age1REEMPLAZAME>
