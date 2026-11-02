@@ -1,5 +1,16 @@
 creation_rules:
-  - path_regex: '.*\.secrets?\.ya?ml$'
-    # Reemplaza por la public key generada con `mise run age-keygen`
-    # (ver ~/.config/sops/age/keys.txt -> linea "public key: age1...")
-    age: <age1REEMPLAZAME>
+  # Secret de Kubernetes: Flux necesita apiVersion, kind y metadata sin cifrar.
+  # Los marcadores se rellenan con `mise run age-keygen`, `flux-keygen` y `add-recipient`.
+  - path_regex: '^(apps|infrastructure|clusters)/dev/.*\.secrets?\.ya?ml$'
+    encrypted_regex: '^(data|stringData)$'
+    age: <age1REEMPLAZAME_DEV>,<age1REEMPLAZAME_TEAM>
+  - path_regex: '^(apps|infrastructure|clusters)/preprod/.*\.secrets?\.ya?ml$'
+    encrypted_regex: '^(data|stringData)$'
+    age: <age1REEMPLAZAME_PREPROD>,<age1REEMPLAZAME_TEAM>
+  # Prod no incluye la clave del equipo: solo el cluster y sus administradores descifran.
+  - path_regex: '^(apps|infrastructure|clusters)/prod/.*\.secrets?\.ya?ml$'
+    encrypted_regex: '^(data|stringData)$'
+    age: <age1REEMPLAZAME_PROD>,<age1REEMPLAZAME_PROD_ADMINS>
+  # Values para usar a mano con helm secrets: cifrado del archivo completo.
+  - path_regex: '^local/.*\.secrets?\.ya?ml$'
+    age: <age1REEMPLAZAME_TEAM>

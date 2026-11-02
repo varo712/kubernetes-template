@@ -1,0 +1,27 @@
+apiVersion: fluxcd.controlplane.io/v1
+kind: FluxInstance
+metadata:
+  name: flux
+  namespace: flux-system
+spec:
+  distribution:
+    version: "2.10.0"
+    registry: ghcr.io/fluxcd
+  sync:
+    kind: GitRepository
+    url: https://REEMPLAZAME/REEMPLAZAME.git
+    ref: refs/heads/main
+    path: clusters/prod
+    pullSecret: flux-system
+  kustomize:
+    patches:
+      - target:
+          kind: Kustomization
+          name: flux-system
+        patch: |
+          - op: add
+            path: /spec/decryption
+            value:
+              provider: sops
+              secretRef:
+                name: sops-age

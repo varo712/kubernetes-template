@@ -1,0 +1,8 @@
+# Equipo que aprueba cambios en prod: se define con `mise run configure`
+/clusters/prod/         @varo712
+/apps/prod/             @varo712
+/infrastructure/prod/   @varo712
+/apps/base/             @varo712
+/infrastructure/base/   @varo712
+/.sops.yaml             @varo712
+/CODEOWNERS             @varo712

@@ -4,10 +4,16 @@ repos:
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
+      - id: mixed-line-ending
+        args: ["--fix=lf"]
       - id: check-yaml
         args: ["--allow-multiple-documents"]
+      - id: check-toml
       - id: check-added-large-files
       - id: check-merge-conflict
+      - id: check-case-conflict
+      - id: check-illegal-windows-names
+      - id: no-commit-to-branch
 
   - repo: https://github.com/gitleaks/gitleaks
     rev: v8.24.2
@@ -21,3 +27,9 @@ repos:
         entry: "bash -c 'for f in \"$@\"; do grep -q \"^sops:\" \"$f\" || { echo \"NO encriptado: $f\"; exit 1; }; done' --"
         language: system
         files: '(\.decrypted~.*)?\.secrets?\.ya?ml$'
+      # encrypted_regex solo cifra data/stringData: cualquier otro archivo quedaria en claro
+      - id: env-secret-kind
+        name: Verifica que los secrets de cada entorno sean kind Secret
+        entry: "bash -c 'for f in \"$@\"; do grep -q \"^kind: Secret$\" \"$f\" || { echo \"No es kind Secret: $f\"; exit 1; }; done' --"
+        language: system
+        files: '^(apps|infrastructure|clusters)/(dev|preprod|prod)/.*\.secrets?\.ya?ml$'
